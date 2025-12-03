@@ -9,23 +9,12 @@ def pytest_configure(config):
     config.option.allure_report_dir = "./allure-results"
 
 
-@pytest.fixture(scope="session")
-def base_url():
-    """Базовый URL для API."""
-    return BASE_URL
-
-
 @pytest.fixture(scope="function")
-def api_client(base_url):
-    """Фикстура для создания клиента API."""
-    return ApiClient(base_url)
-
-
-@pytest.fixture(scope="function")
-def registered_user(api_client):
+def registered_user():
     """Фикстура для создания зарегистрированного пользователя."""
     # Создание тестового пользователя
     test_user = generate_user_data()
+    api_client = ApiClient(BASE_URL)
     register_response = api_client.post("/api/auth/register", json=test_user)
     
     # Проверяем, что регистрация успешна
